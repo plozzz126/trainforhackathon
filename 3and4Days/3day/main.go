@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,12 +16,15 @@ func main(){
 	r := gin.Default()
 
 	r.GET("/hello", func(c *gin.Context) {
+		start := time.Now()
 		c.JSON(200, gin.H{
 			"hello": "Hello world",
 		})
+		fmt.Println("Время", time.Since(start))
 	})
 
 	r.POST("/sum", func(c *gin.Context){
+		start := time.Now()
 		var req Sum
 
 		if err := c.ShouldBindJSON(&req); err != nil{
@@ -34,6 +39,10 @@ func main(){
 		c.JSON(200, gin.H{
 			"result": result, 
 		})
+
+		c.Next()
+
+		fmt.Println("Время", time.Since(start))
 	})
 
 
